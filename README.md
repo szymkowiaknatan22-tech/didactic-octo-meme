@@ -2,6 +2,12 @@
 
 A touchpad-optimized 2D roguelike shooter built with Python and Pygame.
 
+## 🎮 Play Online
+
+**[Play in your browser on GitHub Pages!](https://szymkowiaknatan22-tech.github.io/didactic-octo-meme/)**
+
+No installation required - runs directly in your web browser using WebAssembly.
+
 ## Features
 
 - **3 Input Modes** optimized for touchpad/laptop play
@@ -20,7 +26,12 @@ A touchpad-optimized 2D roguelike shooter built with Python and Pygame.
   - Precision modifier (hold Shift)
   - Fire rate adjustment
 
-## Installation
+## Installation (Desktop)
+
+### Play Online (Recommended)
+Visit the [GitHub Pages deployment](https://szymkowiaknatan22-tech.github.io/didactic-octo-meme/) to play instantly in your browser!
+
+### Run Locally
 
 1. Install Python 3.8 or higher
 2. Install dependencies:
@@ -30,6 +41,10 @@ A touchpad-optimized 2D roguelike shooter built with Python and Pygame.
 
 ## How to Play
 
+### Web Version
+Simply visit the [online version](https://szymkowiaknatan22-tech.github.io/didactic-octo-meme/) in a modern web browser (Chrome, Firefox, Safari, Edge).
+
+### Desktop Version
 Run the game:
 ```bash
 python main.py
@@ -69,6 +84,18 @@ Access the Settings menu from the title screen or pause menu to customize:
 - **Show Crosshair**: Toggle crosshair visibility
 - **Hide System Cursor**: Hide the OS cursor
 - **Relative Mouse**: Use relative mouse movement (experimental)
+
+## Development
+
+### Building for Web
+The game is automatically built and deployed to GitHub Pages via GitHub Actions. To build locally:
+
+```bash
+pip install pygbag
+pygbag --build .
+```
+
+The web build will be in the `build/web` directory.
 
 ## Credits
 

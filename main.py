@@ -2,11 +2,12 @@
 Entry point. Game loop and state orchestration.
 """
 import sys
+import asyncio
 import pygame
 from config import *
 from core.game import Game
 
-def main():
+async def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption(TITLE)
@@ -28,9 +29,12 @@ def main():
         game.update(dt)
         game.draw()
         pygame.display.flip()
+        
+        # Required for web build - yield control to browser
+        await asyncio.sleep(0)
     
     pygame.quit()
     sys.exit()
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
