@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fractured Depths - Touchpad Roguelike</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f14 0%, #1a1a2e 100%);
+            color: #dcdcdc;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            font-size: 3em;
+            color: #64c8ff;
+            text-shadow: 0 0 20px rgba(100, 200, 255, 0.5);
+            margin-bottom: 10px;
+        }
+        .tagline {
+            font-size: 1.2em;
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+        .controls-info {
+            background: rgba(30, 30, 40, 0.8);
+            border: 2px solid #64c8ff;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 800px;
+            margin-bottom: 30px;
+        }
+        .controls-info h2 {
+            color: #64c8ff;
+            margin-bottom: 15px;
+        }
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .control-item {
+            background: rgba(50, 50, 60, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #64c8ff;
+        }
+        .control-item strong {
+            color: #ffff64;
+        }
+        #game-container {
+            width: 100%;
+            max-width: 1280px;
+            background: #000;
+            border: 3px solid #64c8ff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(100, 200, 255, 0.3);
+        }
+        #loading {
+            text-align: center;
+            padding: 100px 20px;
+            font-size: 1.5em;
+            color: #64c8ff;
+        }
+        .spinner {
+            border: 4px solid rgba(100, 200, 255, 0.1);
+            border-top: 4px solid #64c8ff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .warning {
+            background: rgba(255, 150, 50, 0.2);
+            border: 2px solid #ff9632;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            max-width: 800px;
+        }
+        .warning strong {
+            color: #ff9632;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎮 Fractured Depths</h1>
+        <p class="tagline">Touchpad-Optimized 2D Roguelike Shooter</p>
+    </header>
+
+    <div class="warning">
+        <strong>⏱️ First Load Notice:</strong> The game may take 30-60 seconds to load initially as it downloads the Python runtime (~10MB). Subsequent loads will be faster. Please be patient!
+    </div>
+
+    <div class="controls-info">
+        <h2>🎯 Controls</h2>
+        <div class="controls-grid">
+            <div class="control-item">
+                <strong>WASD</strong> - Move player
+            </div>
+            <div class="control-item">
+                <strong>F1</strong> - Cursor Click Mode (click to shoot)
+            </div>
+            <div class="control-item">
+                <strong>F2</strong> - Auto-Fire Mode (no clicking!)
+            </div>
+            <div class="control-item">
+                <strong>F3</strong> - Keyboard-Only (arrow keys)
+            </div>
+            <div class="control-item">
+                <strong>SHIFT</strong> - Precision aim (slower)
+            </div>
+            <div class="control-item">
+                <strong>ESC</strong> - Pause menu / Settings
+            </div>
+        </div>
+        <p style="margin-top: 15px; font-style: italic; color: #aaa;">
+            💡 Tip: Try <strong>F2 (Auto-Fire Mode)</strong> for the most comfortable touchpad experience - no clicking needed!
+        </p>
+    </div>
+
+    <div id="game-container">
+        <div id="loading">
+            <div class="spinner"></div>
+            <p>Loading Fractured Depths...</p>
+            <p style="font-size: 0.8em; color: #888; margin-top: 10px;">Downloading Python runtime and game assets</p>
+        </div>
+        <div id="pygame-container"></div>
+    </div>
+
+    <footer>
+        <p>Built with Python + Pygame + Pygbag | Original Clean-Room Design</p>
+        <p style="margin-top: 5px;">
+            <a href="https://github.com/szymkowiaknatan22-tech/didactic-octo-meme" style="color: #64c8ff; text-decoration: none;">
+                View on GitHub
+            </a>
+        </p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/pygbag@0.8.7/static/pythons.js"></script>
+    <script>
+        async function loadGame() {
+            try {
+                await pygbag.load({
+                    python_version: "3.11",
+                    onfocus: () => console.log("Game focused"),
+                    onblur: () => console.log("Game blurred")
+                });
+                document.getElementById('loading').style.display = 'none';
+            } catch (error) {
+                document.getElementById('loading').innerHTML = `
+                    <p style="color: #ff5050;">Failed to load game:</p>
+                    <p style="font-size: 0.9em;">${error.message}</p>
+                    <p style="font-size: 0.8em; margin-top: 20px;">Try refreshing the page or running locally with: <code>python main.py</code></p>
+                `;
+            }
+        }
+        loadGame();
+    </script>
+</body>
+</html>
