@@ -164,9 +164,31 @@
         </p>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/pygbag@0.8.7/static/pythons.js"></script>
+    <script src="https://pygame-web.github.io/archives/0.9/pythons.js"></script>
     <script>
-        async function loadGame() {
+        window.addEventListener('load', async function() {
+            // Wait for pygbag to be defined
+            if (typeof pygbag === 'undefined') {
+                const POLLING_INTERVAL_MS = 100;
+                const MAX_WAIT_TIME_MS = 5000;
+                const maxAttempts = MAX_WAIT_TIME_MS / POLLING_INTERVAL_MS;
+                let attempts = 0;
+                
+                while (typeof pygbag === 'undefined' && attempts < maxAttempts) {
+                    await new Promise(resolve => setTimeout(resolve, POLLING_INTERVAL_MS));
+                    attempts++;
+                }
+                
+                if (typeof pygbag === 'undefined') {
+                    document.getElementById('loading').innerHTML = `
+                        <p style="color: #ff5050;">Failed to load game:</p>
+                        <p style="font-size: 0.9em;">Can't find variable: pygbag</p>
+                        <p style="font-size: 0.8em; margin-top: 20px;">Try refreshing the page or running locally with: <code>python main.py</code></p>
+                    `;
+                    return;
+                }
+            }
+            
             try {
                 await pygbag.load({
                     python_version: "3.11",
@@ -181,8 +203,7 @@
                     <p style="font-size: 0.8em; margin-top: 20px;">Try refreshing the page or running locally with: <code>python main.py</code></p>
                 `;
             }
-        }
-        loadGame();
+        });
     </script>
 </body>
 </html>
