@@ -169,11 +169,13 @@
         window.addEventListener('load', async function() {
             // Wait for pygbag to be defined
             if (typeof pygbag === 'undefined') {
+                const POLLING_INTERVAL_MS = 100;
+                const MAX_WAIT_TIME_MS = 5000;
+                const maxAttempts = MAX_WAIT_TIME_MS / POLLING_INTERVAL_MS;
                 let attempts = 0;
-                const maxAttempts = 50;
                 
                 while (typeof pygbag === 'undefined' && attempts < maxAttempts) {
-                    await new Promise(resolve => setTimeout(resolve, 100));
+                    await new Promise(resolve => setTimeout(resolve, POLLING_INTERVAL_MS));
                     attempts++;
                 }
                 
